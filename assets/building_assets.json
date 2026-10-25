@@ -1,0 +1,2005 @@
+{
+ "buildings": [
+  {
+   "id": "house_wide",
+   "type": "house",
+   "aspect": "wide",
+   "file": "house_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "منزل",
+    "en": "House"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "East LS",
+    "South Central",
+    "South LS"
+   ],
+   "height": 1,
+   "note": "pitched roof, chimney and a porch over the door"
+  },
+  {
+   "id": "house_square",
+   "type": "house",
+   "aspect": "square",
+   "file": "house_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "منزل",
+    "en": "House"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "East LS",
+    "South Central",
+    "South LS"
+   ],
+   "height": 1,
+   "note": "pitched roof, chimney and a porch over the door"
+  },
+  {
+   "id": "house_tall",
+   "type": "house",
+   "aspect": "tall",
+   "file": "house_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "منزل",
+    "en": "House"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "East LS",
+    "South Central",
+    "South LS"
+   ],
+   "height": 1,
+   "note": "pitched roof, chimney and a porch over the door"
+  },
+  {
+   "id": "old_house_wide",
+   "type": "old_house",
+   "aspect": "wide",
+   "file": "old_house_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "منزل قديم",
+    "en": "Old house"
+   },
+   "districts": [
+    "South LS",
+    "East LS",
+    "Industrial"
+   ],
+   "height": 1,
+   "note": "tar patches, moss, boarded windows and a sagging porch"
+  },
+  {
+   "id": "old_house_square",
+   "type": "old_house",
+   "aspect": "square",
+   "file": "old_house_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "منزل قديم",
+    "en": "Old house"
+   },
+   "districts": [
+    "South LS",
+    "East LS",
+    "Industrial"
+   ],
+   "height": 1,
+   "note": "tar patches, moss, boarded windows and a sagging porch"
+  },
+  {
+   "id": "old_house_tall",
+   "type": "old_house",
+   "aspect": "tall",
+   "file": "old_house_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "منزل قديم",
+    "en": "Old house"
+   },
+   "districts": [
+    "South LS",
+    "East LS",
+    "Industrial"
+   ],
+   "height": 1,
+   "note": "tar patches, moss, boarded windows and a sagging porch"
+  },
+  {
+   "id": "small_apartment_wide",
+   "type": "small_apartment",
+   "aspect": "wide",
+   "file": "small_apartment_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "عمارة صغيرة",
+    "en": "Small apartment"
+   },
+   "districts": [
+    "East LS",
+    "South LS",
+    "Vinewood Hills"
+   ],
+   "height": 2,
+   "note": "walk-up with balconies and a rooftop water tank"
+  },
+  {
+   "id": "small_apartment_square",
+   "type": "small_apartment",
+   "aspect": "square",
+   "file": "small_apartment_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "عمارة صغيرة",
+    "en": "Small apartment"
+   },
+   "districts": [
+    "East LS",
+    "South LS",
+    "Vinewood Hills"
+   ],
+   "height": 2,
+   "note": "walk-up with balconies and a rooftop water tank"
+  },
+  {
+   "id": "small_apartment_tall",
+   "type": "small_apartment",
+   "aspect": "tall",
+   "file": "small_apartment_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "عمارة صغيرة",
+    "en": "Small apartment"
+   },
+   "districts": [
+    "East LS",
+    "South LS",
+    "Vinewood Hills"
+   ],
+   "height": 2,
+   "note": "walk-up with balconies and a rooftop water tank"
+  },
+  {
+   "id": "medium_apartment_wide",
+   "type": "medium_apartment",
+   "aspect": "wide",
+   "file": "medium_apartment_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "عمارة متوسطة",
+    "en": "Medium apartment"
+   },
+   "districts": [
+    "South Central",
+    "East LS",
+    "Market / Rodeo"
+   ],
+   "height": 3,
+   "note": "five-storey L block with a stair wing"
+  },
+  {
+   "id": "medium_apartment_square",
+   "type": "medium_apartment",
+   "aspect": "square",
+   "file": "medium_apartment_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "عمارة متوسطة",
+    "en": "Medium apartment"
+   },
+   "districts": [
+    "South Central",
+    "East LS",
+    "Market / Rodeo"
+   ],
+   "height": 3,
+   "note": "five-storey L block with a stair wing"
+  },
+  {
+   "id": "medium_apartment_tall",
+   "type": "medium_apartment",
+   "aspect": "tall",
+   "file": "medium_apartment_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "عمارة متوسطة",
+    "en": "Medium apartment"
+   },
+   "districts": [
+    "South Central",
+    "East LS",
+    "Market / Rodeo"
+   ],
+   "height": 3,
+   "note": "five-storey L block with a stair wing"
+  },
+  {
+   "id": "large_apartment_wide",
+   "type": "large_apartment",
+   "aspect": "wide",
+   "file": "large_apartment_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "عمارة كبيرة",
+    "en": "Large apartment"
+   },
+   "districts": [
+    "South LS",
+    "Vinewood Hills",
+    "Midtown"
+   ],
+   "height": 4,
+   "note": "slab tower with balcony bands and a lift overrun"
+  },
+  {
+   "id": "large_apartment_square",
+   "type": "large_apartment",
+   "aspect": "square",
+   "file": "large_apartment_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "عمارة كبيرة",
+    "en": "Large apartment"
+   },
+   "districts": [
+    "South LS",
+    "Vinewood Hills",
+    "Midtown"
+   ],
+   "height": 4,
+   "note": "slab tower with balcony bands and a lift overrun"
+  },
+  {
+   "id": "large_apartment_tall",
+   "type": "large_apartment",
+   "aspect": "tall",
+   "file": "large_apartment_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "عمارة كبيرة",
+    "en": "Large apartment"
+   },
+   "districts": [
+    "South LS",
+    "Vinewood Hills",
+    "Midtown"
+   ],
+   "height": 4,
+   "note": "slab tower with balcony bands and a lift overrun"
+  },
+  {
+   "id": "apartment_block_wide",
+   "type": "apartment_block",
+   "aspect": "wide",
+   "file": "apartment_block_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "عمارة سكنية",
+    "en": "Apartment block"
+   },
+   "districts": [
+    "East LS",
+    "South Central",
+    "South LS",
+    "Vinewood Hills"
+   ],
+   "height": 2,
+   "note": "brick perimeter block around a courtyard"
+  },
+  {
+   "id": "apartment_block_square",
+   "type": "apartment_block",
+   "aspect": "square",
+   "file": "apartment_block_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "عمارة سكنية",
+    "en": "Apartment block"
+   },
+   "districts": [
+    "East LS",
+    "South Central",
+    "South LS",
+    "Vinewood Hills"
+   ],
+   "height": 2,
+   "note": "brick perimeter block around a courtyard"
+  },
+  {
+   "id": "apartment_block_tall",
+   "type": "apartment_block",
+   "aspect": "tall",
+   "file": "apartment_block_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "عمارة سكنية",
+    "en": "Apartment block"
+   },
+   "districts": [
+    "East LS",
+    "South Central",
+    "South LS",
+    "Vinewood Hills"
+   ],
+   "height": 2,
+   "note": "brick perimeter block around a courtyard"
+  },
+  {
+   "id": "closed_shop_wide",
+   "type": "closed_shop",
+   "aspect": "wide",
+   "file": "closed_shop_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "محل مغلق",
+    "en": "Closed shop"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "South LS",
+    "Industrial",
+    "East LS"
+   ],
+   "height": 1,
+   "note": "shutter down, windows boarded, blank board on the parapet"
+  },
+  {
+   "id": "closed_shop_square",
+   "type": "closed_shop",
+   "aspect": "square",
+   "file": "closed_shop_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "محل مغلق",
+    "en": "Closed shop"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "South LS",
+    "Industrial",
+    "East LS"
+   ],
+   "height": 1,
+   "note": "shutter down, windows boarded, blank board on the parapet"
+  },
+  {
+   "id": "closed_shop_tall",
+   "type": "closed_shop",
+   "aspect": "tall",
+   "file": "closed_shop_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "محل مغلق",
+    "en": "Closed shop"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "South LS",
+    "Industrial",
+    "East LS"
+   ],
+   "height": 1,
+   "note": "shutter down, windows boarded, blank board on the parapet"
+  },
+  {
+   "id": "diner_wide",
+   "type": "diner",
+   "aspect": "wide",
+   "file": "diner_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "مطعم",
+    "en": "Diner"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Vespucci Beach",
+    "Santa Maria Beach"
+   ],
+   "height": 1,
+   "note": "retro diner with a chrome band and a rooftop sign"
+  },
+  {
+   "id": "diner_square",
+   "type": "diner",
+   "aspect": "square",
+   "file": "diner_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "مطعم",
+    "en": "Diner"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Vespucci Beach",
+    "Santa Maria Beach"
+   ],
+   "height": 1,
+   "note": "retro diner with a chrome band and a rooftop sign"
+  },
+  {
+   "id": "diner_tall",
+   "type": "diner",
+   "aspect": "tall",
+   "file": "diner_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "مطعم",
+    "en": "Diner"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Vespucci Beach",
+    "Santa Maria Beach"
+   ],
+   "height": 1,
+   "note": "retro diner with a chrome band and a rooftop sign"
+  },
+  {
+   "id": "motel_wide",
+   "type": "motel",
+   "aspect": "wide",
+   "file": "motel_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "نُزل",
+    "en": "Motel"
+   },
+   "districts": [
+    "Vespucci Beach",
+    "Santa Maria Beach",
+    "East LS"
+   ],
+   "height": 1,
+   "note": "walkway wing around a courtyard pool"
+  },
+  {
+   "id": "motel_square",
+   "type": "motel",
+   "aspect": "square",
+   "file": "motel_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "نُزل",
+    "en": "Motel"
+   },
+   "districts": [
+    "Vespucci Beach",
+    "Santa Maria Beach",
+    "East LS"
+   ],
+   "height": 1,
+   "note": "walkway wing around a courtyard pool"
+  },
+  {
+   "id": "motel_tall",
+   "type": "motel",
+   "aspect": "tall",
+   "file": "motel_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "نُزل",
+    "en": "Motel"
+   },
+   "districts": [
+    "Vespucci Beach",
+    "Santa Maria Beach",
+    "East LS"
+   ],
+   "height": 1,
+   "note": "walkway wing around a courtyard pool"
+  },
+  {
+   "id": "gas_station_wide",
+   "type": "gas_station",
+   "aspect": "wide",
+   "file": "gas_station_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "محطة وقود",
+    "en": "Gas station"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Vespucci Beach",
+    "South LS",
+    "LS Airport"
+   ],
+   "height": 1,
+   "note": "canopy over the pumps with a kiosk and a price totem"
+  },
+  {
+   "id": "gas_station_square",
+   "type": "gas_station",
+   "aspect": "square",
+   "file": "gas_station_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "محطة وقود",
+    "en": "Gas station"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Vespucci Beach",
+    "South LS",
+    "LS Airport"
+   ],
+   "height": 1,
+   "note": "canopy over the pumps with a kiosk and a price totem"
+  },
+  {
+   "id": "gas_station_tall",
+   "type": "gas_station",
+   "aspect": "tall",
+   "file": "gas_station_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "محطة وقود",
+    "en": "Gas station"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Vespucci Beach",
+    "South LS",
+    "LS Airport"
+   ],
+   "height": 1,
+   "note": "canopy over the pumps with a kiosk and a price totem"
+  },
+  {
+   "id": "school_wide",
+   "type": "school",
+   "aspect": "wide",
+   "file": "school_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "مدرسة",
+    "en": "School"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "East LS",
+    "South Central"
+   ],
+   "height": 2,
+   "note": "classroom block, rooftop court and a gym wing"
+  },
+  {
+   "id": "school_square",
+   "type": "school",
+   "aspect": "square",
+   "file": "school_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "مدرسة",
+    "en": "School"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "East LS",
+    "South Central"
+   ],
+   "height": 2,
+   "note": "classroom block, rooftop court and a gym wing"
+  },
+  {
+   "id": "school_tall",
+   "type": "school",
+   "aspect": "tall",
+   "file": "school_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "مدرسة",
+    "en": "School"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "East LS",
+    "South Central"
+   ],
+   "height": 2,
+   "note": "classroom block, rooftop court and a gym wing"
+  },
+  {
+   "id": "fire_station_wide",
+   "type": "fire_station",
+   "aspect": "wide",
+   "file": "fire_station_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "محطة إطفاء",
+    "en": "Fire station"
+   },
+   "districts": [
+    "Midtown",
+    "Downtown",
+    "South Central"
+   ],
+   "height": 2,
+   "note": "appliance bays and a hose-drying tower"
+  },
+  {
+   "id": "fire_station_square",
+   "type": "fire_station",
+   "aspect": "square",
+   "file": "fire_station_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "محطة إطفاء",
+    "en": "Fire station"
+   },
+   "districts": [
+    "Midtown",
+    "Downtown",
+    "South Central"
+   ],
+   "height": 2,
+   "note": "appliance bays and a hose-drying tower"
+  },
+  {
+   "id": "fire_station_tall",
+   "type": "fire_station",
+   "aspect": "tall",
+   "file": "fire_station_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "محطة إطفاء",
+    "en": "Fire station"
+   },
+   "districts": [
+    "Midtown",
+    "Downtown",
+    "South Central"
+   ],
+   "height": 2,
+   "note": "appliance bays and a hose-drying tower"
+  },
+  {
+   "id": "nightclub_wide",
+   "type": "nightclub",
+   "aspect": "wide",
+   "file": "nightclub_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "نادي ليلي",
+    "en": "Nightclub"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Downtown"
+   ],
+   "height": 2,
+   "note": "near-black block with neon edging and a lit entrance"
+  },
+  {
+   "id": "nightclub_square",
+   "type": "nightclub",
+   "aspect": "square",
+   "file": "nightclub_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "نادي ليلي",
+    "en": "Nightclub"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Downtown"
+   ],
+   "height": 2,
+   "note": "near-black block with neon edging and a lit entrance"
+  },
+  {
+   "id": "nightclub_tall",
+   "type": "nightclub",
+   "aspect": "tall",
+   "file": "nightclub_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "نادي ليلي",
+    "en": "Nightclub"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Downtown"
+   ],
+   "height": 2,
+   "note": "near-black block with neon edging and a lit entrance"
+  },
+  {
+   "id": "beach_hut_wide",
+   "type": "beach_hut",
+   "aspect": "wide",
+   "file": "beach_hut_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "كوخ شاطئ",
+    "en": "Beach hut"
+   },
+   "districts": [
+    "Vespucci Beach",
+    "Santa Maria Beach"
+   ],
+   "height": 1,
+   "note": "boardwalk shack with a plank roof and a veranda"
+  },
+  {
+   "id": "beach_hut_square",
+   "type": "beach_hut",
+   "aspect": "square",
+   "file": "beach_hut_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "كوخ شاطئ",
+    "en": "Beach hut"
+   },
+   "districts": [
+    "Vespucci Beach",
+    "Santa Maria Beach"
+   ],
+   "height": 1,
+   "note": "boardwalk shack with a plank roof and a veranda"
+  },
+  {
+   "id": "beach_hut_tall",
+   "type": "beach_hut",
+   "aspect": "tall",
+   "file": "beach_hut_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "كوخ شاطئ",
+    "en": "Beach hut"
+   },
+   "districts": [
+    "Vespucci Beach",
+    "Santa Maria Beach"
+   ],
+   "height": 1,
+   "note": "boardwalk shack with a plank roof and a veranda"
+  },
+  {
+   "id": "warehouse_wide",
+   "type": "warehouse",
+   "aspect": "wide",
+   "file": "warehouse_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "مستودع",
+    "en": "Warehouse"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks",
+    "LS Airport"
+   ],
+   "height": 1,
+   "note": "corrugated shed with a ridge monitor and loading bays"
+  },
+  {
+   "id": "warehouse_square",
+   "type": "warehouse",
+   "aspect": "square",
+   "file": "warehouse_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "مستودع",
+    "en": "Warehouse"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks",
+    "LS Airport"
+   ],
+   "height": 1,
+   "note": "corrugated shed with a ridge monitor and loading bays"
+  },
+  {
+   "id": "warehouse_tall",
+   "type": "warehouse",
+   "aspect": "tall",
+   "file": "warehouse_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "مستودع",
+    "en": "Warehouse"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks",
+    "LS Airport"
+   ],
+   "height": 1,
+   "note": "corrugated shed with a ridge monitor and loading bays"
+  },
+  {
+   "id": "warehouse_yard_wide",
+   "type": "warehouse_yard",
+   "aspect": "wide",
+   "file": "warehouse_yard_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "ساحة تخزين",
+    "en": "Storage yard"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks",
+    "LS Airport"
+   ],
+   "height": 1,
+   "note": "shed with a hardstanding of pallets, drums and a trailer"
+  },
+  {
+   "id": "warehouse_yard_square",
+   "type": "warehouse_yard",
+   "aspect": "square",
+   "file": "warehouse_yard_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "ساحة تخزين",
+    "en": "Storage yard"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks",
+    "LS Airport"
+   ],
+   "height": 1,
+   "note": "shed with a hardstanding of pallets, drums and a trailer"
+  },
+  {
+   "id": "warehouse_yard_tall",
+   "type": "warehouse_yard",
+   "aspect": "tall",
+   "file": "warehouse_yard_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "ساحة تخزين",
+    "en": "Storage yard"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks",
+    "LS Airport"
+   ],
+   "height": 1,
+   "note": "shed with a hardstanding of pallets, drums and a trailer"
+  },
+  {
+   "id": "factory_wide",
+   "type": "factory",
+   "aspect": "wide",
+   "file": "factory_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "مصنع",
+    "en": "Factory"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks"
+   ],
+   "height": 2,
+   "note": "sawtooth roof, glazed faces and a chimney"
+  },
+  {
+   "id": "factory_square",
+   "type": "factory",
+   "aspect": "square",
+   "file": "factory_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "مصنع",
+    "en": "Factory"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks"
+   ],
+   "height": 2,
+   "note": "sawtooth roof, glazed faces and a chimney"
+  },
+  {
+   "id": "factory_tall",
+   "type": "factory",
+   "aspect": "tall",
+   "file": "factory_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "مصنع",
+    "en": "Factory"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks"
+   ],
+   "height": 2,
+   "note": "sawtooth roof, glazed faces and a chimney"
+  },
+  {
+   "id": "office_tower_wide",
+   "type": "office_tower",
+   "aspect": "wide",
+   "file": "office_tower_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "برج مكاتب",
+    "en": "Office tower"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown",
+    "Market / Rodeo"
+   ],
+   "height": 5,
+   "note": "glass tower seen from above: plant, mast and helipad"
+  },
+  {
+   "id": "office_tower_square",
+   "type": "office_tower",
+   "aspect": "square",
+   "file": "office_tower_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "برج مكاتب",
+    "en": "Office tower"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown",
+    "Market / Rodeo"
+   ],
+   "height": 5,
+   "note": "glass tower seen from above: plant, mast and helipad"
+  },
+  {
+   "id": "office_tower_tall",
+   "type": "office_tower",
+   "aspect": "tall",
+   "file": "office_tower_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "برج مكاتب",
+    "en": "Office tower"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown",
+    "Market / Rodeo"
+   ],
+   "height": 5,
+   "note": "glass tower seen from above: plant, mast and helipad"
+  },
+  {
+   "id": "parking_garage_wide",
+   "type": "parking_garage",
+   "aspect": "wide",
+   "file": "parking_garage_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "موقف متعدد الطوابق",
+    "en": "Parking garage"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown"
+   ],
+   "height": 4,
+   "note": "open top deck with parked cars, ramp and stair core"
+  },
+  {
+   "id": "parking_garage_square",
+   "type": "parking_garage",
+   "aspect": "square",
+   "file": "parking_garage_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "موقف متعدد الطوابق",
+    "en": "Parking garage"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown"
+   ],
+   "height": 4,
+   "note": "open top deck with parked cars, ramp and stair core"
+  },
+  {
+   "id": "parking_garage_tall",
+   "type": "parking_garage",
+   "aspect": "tall",
+   "file": "parking_garage_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "موقف متعدد الطوابق",
+    "en": "Parking garage"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown"
+   ],
+   "height": 4,
+   "note": "open top deck with parked cars, ramp and stair core"
+  },
+  {
+   "id": "office_block_wide",
+   "type": "office_block",
+   "aspect": "wide",
+   "file": "office_block_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "مكتب تجاري",
+    "en": "Office block"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown",
+    "Market / Rodeo",
+    "LS Airport"
+   ],
+   "height": 3,
+   "note": "ribbon glazing behind vertical fins, lift core on the roof"
+  },
+  {
+   "id": "office_block_square",
+   "type": "office_block",
+   "aspect": "square",
+   "file": "office_block_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "مكتب تجاري",
+    "en": "Office block"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown",
+    "Market / Rodeo",
+    "LS Airport"
+   ],
+   "height": 3,
+   "note": "ribbon glazing behind vertical fins, lift core on the roof"
+  },
+  {
+   "id": "office_block_tall",
+   "type": "office_block",
+   "aspect": "tall",
+   "file": "office_block_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "مكتب تجاري",
+    "en": "Office block"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown",
+    "Market / Rodeo",
+    "LS Airport"
+   ],
+   "height": 3,
+   "note": "ribbon glazing behind vertical fins, lift core on the roof"
+  },
+  {
+   "id": "condo_tower_wide",
+   "type": "condo_tower",
+   "aspect": "wide",
+   "file": "condo_tower_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "برج سكني",
+    "en": "Condo tower"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown",
+    "South Central",
+    "Vinewood Hills"
+   ],
+   "height": 5,
+   "note": "tower read from above: balcony rhythm, roof club and a pool"
+  },
+  {
+   "id": "condo_tower_square",
+   "type": "condo_tower",
+   "aspect": "square",
+   "file": "condo_tower_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "برج سكني",
+    "en": "Condo tower"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown",
+    "South Central",
+    "Vinewood Hills"
+   ],
+   "height": 5,
+   "note": "tower read from above: balcony rhythm, roof club and a pool"
+  },
+  {
+   "id": "condo_tower_tall",
+   "type": "condo_tower",
+   "aspect": "tall",
+   "file": "condo_tower_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "برج سكني",
+    "en": "Condo tower"
+   },
+   "districts": [
+    "Downtown",
+    "Midtown",
+    "South Central",
+    "Vinewood Hills"
+   ],
+   "height": 5,
+   "note": "tower read from above: balcony rhythm, roof club and a pool"
+  },
+  {
+   "id": "hotel_wide",
+   "type": "hotel",
+   "aspect": "wide",
+   "file": "hotel_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "فندق",
+    "en": "Hotel"
+   },
+   "districts": [
+    "Midtown",
+    "Market / Rodeo",
+    "Downtown",
+    "Vespucci Beach"
+   ],
+   "height": 4,
+   "note": "balcony rows, a bulb-lit marquee and a rooftop sign pylon"
+  },
+  {
+   "id": "hotel_square",
+   "type": "hotel",
+   "aspect": "square",
+   "file": "hotel_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "فندق",
+    "en": "Hotel"
+   },
+   "districts": [
+    "Midtown",
+    "Market / Rodeo",
+    "Downtown",
+    "Vespucci Beach"
+   ],
+   "height": 4,
+   "note": "balcony rows, a bulb-lit marquee and a rooftop sign pylon"
+  },
+  {
+   "id": "hotel_tall",
+   "type": "hotel",
+   "aspect": "tall",
+   "file": "hotel_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "فندق",
+    "en": "Hotel"
+   },
+   "districts": [
+    "Midtown",
+    "Market / Rodeo",
+    "Downtown",
+    "Vespucci Beach"
+   ],
+   "height": 4,
+   "note": "balcony rows, a bulb-lit marquee and a rooftop sign pylon"
+  },
+  {
+   "id": "storefront_wide",
+   "type": "storefront",
+   "aspect": "wide",
+   "file": "storefront_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "محل تجاري",
+    "en": "Storefront"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "East LS",
+    "South LS",
+    "Vinewood Hills",
+    "South Central"
+   ],
+   "height": 1,
+   "note": "display glass under a striped awning with a roof sign"
+  },
+  {
+   "id": "storefront_square",
+   "type": "storefront",
+   "aspect": "square",
+   "file": "storefront_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "محل تجاري",
+    "en": "Storefront"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "East LS",
+    "South LS",
+    "Vinewood Hills",
+    "South Central"
+   ],
+   "height": 1,
+   "note": "display glass under a striped awning with a roof sign"
+  },
+  {
+   "id": "storefront_tall",
+   "type": "storefront",
+   "aspect": "tall",
+   "file": "storefront_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "محل تجاري",
+    "en": "Storefront"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "East LS",
+    "South LS",
+    "Vinewood Hills",
+    "South Central"
+   ],
+   "height": 1,
+   "note": "display glass under a striped awning with a roof sign"
+  },
+  {
+   "id": "strip_mall_wide",
+   "type": "strip_mall",
+   "aspect": "wide",
+   "file": "strip_mall_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "صف محلات",
+    "en": "Strip mall"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "East LS",
+    "South LS",
+    "Vinewood Hills"
+   ],
+   "height": 1,
+   "note": "one long fascia band over a row of shuttered bays"
+  },
+  {
+   "id": "strip_mall_square",
+   "type": "strip_mall",
+   "aspect": "square",
+   "file": "strip_mall_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "صف محلات",
+    "en": "Strip mall"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "East LS",
+    "South LS",
+    "Vinewood Hills"
+   ],
+   "height": 1,
+   "note": "one long fascia band over a row of shuttered bays"
+  },
+  {
+   "id": "strip_mall_tall",
+   "type": "strip_mall",
+   "aspect": "tall",
+   "file": "strip_mall_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "صف محلات",
+    "en": "Strip mall"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "East LS",
+    "South LS",
+    "Vinewood Hills"
+   ],
+   "height": 1,
+   "note": "one long fascia band over a row of shuttered bays"
+  },
+  {
+   "id": "market_hall_wide",
+   "type": "market_hall",
+   "aspect": "wide",
+   "file": "market_hall_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "سوق مغطى",
+    "en": "Market hall"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Port / Docks",
+    "South Central"
+   ],
+   "height": 2,
+   "note": "ribbed barrel hall with roof lanterns and arched bays"
+  },
+  {
+   "id": "market_hall_square",
+   "type": "market_hall",
+   "aspect": "square",
+   "file": "market_hall_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "سوق مغطى",
+    "en": "Market hall"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Port / Docks",
+    "South Central"
+   ],
+   "height": 2,
+   "note": "ribbed barrel hall with roof lanterns and arched bays"
+  },
+  {
+   "id": "market_hall_tall",
+   "type": "market_hall",
+   "aspect": "tall",
+   "file": "market_hall_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "سوق مغطى",
+    "en": "Market hall"
+   },
+   "districts": [
+    "Market / Rodeo",
+    "Port / Docks",
+    "South Central"
+   ],
+   "height": 2,
+   "note": "ribbed barrel hall with roof lanterns and arched bays"
+  },
+  {
+   "id": "terrace_wide",
+   "type": "terrace",
+   "aspect": "wide",
+   "file": "terrace_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "صف منازل",
+    "en": "Terrace houses"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "East LS",
+    "South LS",
+    "South Central",
+    "Market / Rodeo"
+   ],
+   "height": 2,
+   "note": "party-wall row under one pitched roof, each house its own colour"
+  },
+  {
+   "id": "terrace_square",
+   "type": "terrace",
+   "aspect": "square",
+   "file": "terrace_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "صف منازل",
+    "en": "Terrace houses"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "East LS",
+    "South LS",
+    "South Central",
+    "Market / Rodeo"
+   ],
+   "height": 2,
+   "note": "party-wall row under one pitched roof, each house its own colour"
+  },
+  {
+   "id": "terrace_tall",
+   "type": "terrace",
+   "aspect": "tall",
+   "file": "terrace_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "صف منازل",
+    "en": "Terrace houses"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "East LS",
+    "South LS",
+    "South Central",
+    "Market / Rodeo"
+   ],
+   "height": 2,
+   "note": "party-wall row under one pitched roof, each house its own colour"
+  },
+  {
+   "id": "villa_wide",
+   "type": "villa",
+   "aspect": "wide",
+   "file": "villa_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "فيلا",
+    "en": "Villa"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "Vespucci Beach",
+    "Santa Maria Beach",
+    "East LS"
+   ],
+   "height": 1,
+   "note": "timber terrace with a plunge pool over deep glazing"
+  },
+  {
+   "id": "villa_square",
+   "type": "villa",
+   "aspect": "square",
+   "file": "villa_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "فيلا",
+    "en": "Villa"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "Vespucci Beach",
+    "Santa Maria Beach",
+    "East LS"
+   ],
+   "height": 1,
+   "note": "timber terrace with a plunge pool over deep glazing"
+  },
+  {
+   "id": "villa_tall",
+   "type": "villa",
+   "aspect": "tall",
+   "file": "villa_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "فيلا",
+    "en": "Villa"
+   },
+   "districts": [
+    "Vinewood Hills",
+    "Vespucci Beach",
+    "Santa Maria Beach",
+    "East LS"
+   ],
+   "height": 1,
+   "note": "timber terrace with a plunge pool over deep glazing"
+  },
+  {
+   "id": "silo_wide",
+   "type": "silo",
+   "aspect": "wide",
+   "file": "silo_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "صوامع",
+    "en": "Silos"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks"
+   ],
+   "height": 1,
+   "note": "cylinders under cones, a gallery and a load-out shed"
+  },
+  {
+   "id": "silo_square",
+   "type": "silo",
+   "aspect": "square",
+   "file": "silo_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "صوامع",
+    "en": "Silos"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks"
+   ],
+   "height": 1,
+   "note": "cylinders under cones, a gallery and a load-out shed"
+  },
+  {
+   "id": "silo_tall",
+   "type": "silo",
+   "aspect": "tall",
+   "file": "silo_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "صوامع",
+    "en": "Silos"
+   },
+   "districts": [
+    "Industrial",
+    "Port / Docks"
+   ],
+   "height": 1,
+   "note": "cylinders under cones, a gallery and a load-out shed"
+  },
+  {
+   "id": "hangar_wide",
+   "type": "hangar",
+   "aspect": "wide",
+   "file": "hangar_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "حظيرة طائرات",
+    "en": "Aircraft hangar"
+   },
+   "districts": [
+    "LS Airport",
+    "Industrial"
+   ],
+   "height": 1,
+   "note": "ribbed arch with sliding doors and a marked stand"
+  },
+  {
+   "id": "hangar_square",
+   "type": "hangar",
+   "aspect": "square",
+   "file": "hangar_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "حظيرة طائرات",
+    "en": "Aircraft hangar"
+   },
+   "districts": [
+    "LS Airport",
+    "Industrial"
+   ],
+   "height": 1,
+   "note": "ribbed arch with sliding doors and a marked stand"
+  },
+  {
+   "id": "hangar_tall",
+   "type": "hangar",
+   "aspect": "tall",
+   "file": "hangar_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "حظيرة طائرات",
+    "en": "Aircraft hangar"
+   },
+   "districts": [
+    "LS Airport",
+    "Industrial"
+   ],
+   "height": 1,
+   "note": "ribbed arch with sliding doors and a marked stand"
+  },
+  {
+   "id": "control_tower_wide",
+   "type": "control_tower",
+   "aspect": "wide",
+   "file": "control_tower_wide.svg",
+   "tiles": [
+    4,
+    2
+   ],
+   "viewBox": "0 0 400 200",
+   "label": {
+    "ar": "برج مراقبة",
+    "en": "Control tower"
+   },
+   "districts": [
+    "LS Airport",
+    "Industrial",
+    "Port / Docks"
+   ],
+   "height": 5,
+   "note": "shaft, cantilevered glazed cab and a radar mast"
+  },
+  {
+   "id": "control_tower_square",
+   "type": "control_tower",
+   "aspect": "square",
+   "file": "control_tower_square.svg",
+   "tiles": [
+    2,
+    2
+   ],
+   "viewBox": "0 0 200 200",
+   "label": {
+    "ar": "برج مراقبة",
+    "en": "Control tower"
+   },
+   "districts": [
+    "LS Airport",
+    "Industrial",
+    "Port / Docks"
+   ],
+   "height": 5,
+   "note": "shaft, cantilevered glazed cab and a radar mast"
+  },
+  {
+   "id": "control_tower_tall",
+   "type": "control_tower",
+   "aspect": "tall",
+   "file": "control_tower_tall.svg",
+   "tiles": [
+    2,
+    4
+   ],
+   "viewBox": "0 0 200 400",
+   "label": {
+    "ar": "برج مراقبة",
+    "en": "Control tower"
+   },
+   "districts": [
+    "LS Airport",
+    "Industrial",
+    "Port / Docks"
+   ],
+   "height": 5,
+   "note": "shaft, cantilevered glazed cab and a radar mast"
+  }
+ ]
+}
