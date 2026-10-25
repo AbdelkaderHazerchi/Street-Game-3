@@ -1,0 +1,671 @@
+/* ============================================================================
+   STORY LAYER — Street Game 2 : "The Ghost Ledger"
+   Cutscene overlay + story journal styles.
+   Appended after the base stylesheet; all selectors are namespaced.
+   ========================================================================= */
+
+/* ── Cutscene overlay ─────────────────────────────────────────────── */
+
+.cutscene-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at center, rgba(8, 6, 14, 0.72) 0%, rgba(3, 2, 6, 0.94) 70%),
+    #05040a;
+  animation: cutsceneFade 220ms ease-out;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+@keyframes cutsceneFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.cutscene-inner {
+  position: relative;
+  width: min(880px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 24px;
+}
+
+/* Chapter title card */
+.cutscene-card {
+  text-align: center;
+  padding: 30px 20px 34px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(20, 18, 32, 0.55), rgba(6, 5, 12, 0.2));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  animation: cardRise 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardRise {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.cutscene-chapter {
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 14px;
+}
+
+.cutscene-title {
+  font-size: clamp(26px, 4.6vw, 46px);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #fff;
+  text-shadow: 0 0 28px rgba(255, 215, 0, 0.28), 0 6px 24px rgba(0, 0, 0, 0.6);
+  line-height: 1.2;
+}
+
+/* Dialogue box */
+.cutscene-box {
+  background: rgba(9, 8, 16, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 18px 20px 20px;
+  min-height: 132px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  animation: cardRise 260ms ease-out;
+}
+
+.cutscene-speaker {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+  color: #ffd700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+.cutscene-speaker:empty { display: none; }
+
+.cutscene-text {
+  font-size: clamp(15px, 2.1vw, 19px);
+  line-height: 1.85;
+  color: #f1f5f9;
+  white-space: pre-wrap;
+  min-height: 76px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.cutscene-hint {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.32);
+  min-height: 14px;
+}
+
+/* Hide the whole UI stack while a cutscene plays */
+body.story-cutscene-active #hud,
+body.story-cutscene-active #minimap,
+body.story-cutscene-active #missionBox,
+body.story-cutscene-active #controlsHelp,
+body.story-cutscene-active #inventoryPanel,
+body.story-cutscene-active #touchControls {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 180ms ease;
+}
+
+/* ── Quest accept screen ───────────────────────────────────────────── */
+/* Full-screen quest artwork with the dialogue section pinned to the bottom. */
+
+#questAcceptOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 420;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  background: #05040a;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  animation: cutsceneFade 200ms ease-out;
+}
+
+/* Artwork plate — the image fills the screen behind the dialogue */
+#questAcceptStage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+#questAcceptImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: 50% 45%;
+  animation: qaPushIn 14s ease-out forwards;
+}
+
+@keyframes qaPushIn {
+  from { transform: scale(1.02); }
+  to   { transform: scale(1.11); }
+}
+
+/* Legibility scrim: dark at the very top and behind the dialogue panel */
+#questAcceptScrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg,
+      rgba(5, 4, 10, 0.78) 0%,
+      rgba(5, 4, 10, 0.10) 24%,
+      rgba(5, 4, 10, 0.00) 44%,
+      rgba(5, 4, 10, 0.55) 74%,
+      rgba(5, 4, 10, 0.92) 100%);
+}
+
+#questAcceptHeader {
+  position: absolute;
+  top: clamp(14px, 3.4vh, 36px);
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 92vw;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 9px 20px;
+  border-radius: 999px;
+  background: rgba(8, 7, 14, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+}
+
+.qa-chip {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+.qa-chip.is-main { color: #ffd700; }
+.qa-chip.is-side { color: #c084fc; }
+
+#questAcceptTitle {
+  font-size: clamp(15px, 2.4vw, 22px);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+
+.qa-reward {
+  font-size: 13px;
+  font-weight: 800;
+  color: #4ade80;
+  white-space: nowrap;
+}
+
+/* Dialogue section — bottom of the screen */
+.qa-frame {
+  position: relative;
+  width: min(980px, 94vw);
+  margin: 0 auto clamp(14px, 3vh, 34px);
+  padding: 16px 20px 12px;
+  border-radius: 14px;
+  background: rgba(9, 8, 16, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.62);
+  animation: cardRise 260ms ease-out;
+}
+
+.qa-frame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+#questAcceptSpeaker {
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #ffd700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+#questAcceptSpeaker:empty { display: none; }
+
+#questAcceptProgress {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+}
+
+#questAcceptMessage {
+  font-size: clamp(15px, 2.1vw, 19px);
+  line-height: 1.8;
+  color: #f1f5f9;
+  white-space: pre-wrap;
+  min-height: 72px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.qa-hint {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.34);
+  min-height: 14px;
+}
+
+/* The artwork fades away once the dialogue is done, then the quest lands */
+#questAcceptOverlay.is-leaving #questAcceptStage {
+  opacity: 0;
+  transform: scale(1.06);
+}
+#questAcceptOverlay.is-leaving .qa-frame {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+/* ── Story journal (pause menu tab) ───────────────────────────────── */
+
+.journal-wrap {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 4px 10px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.journal-wrap::-webkit-scrollbar { width: 8px; }
+.journal-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+}
+.journal-wrap::-webkit-scrollbar-track { background: transparent; }
+
+.journal-body { display: flex; flex-direction: column; gap: 18px; }
+
+/* Header */
+.jr-head {
+  border-inline-start: 3px solid #ffd700;
+  padding: 4px 4px 4px 14px;
+}
+
+.jr-head-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.jr-head-sub {
+  font-size: 13px;
+  color: #ffd700;
+  margin-top: 3px;
+  font-weight: 600;
+}
+
+.jr-head-theme {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 6px;
+  line-height: 1.6;
+}
+
+/* Stat strip */
+.jr-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.jr-stat {
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.jr-stat-v {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.jr-stat-l {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+
+.jr-note {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 215, 0, 0.07);
+  border: 1px solid rgba(255, 215, 0, 0.18);
+  border-radius: 8px;
+  padding: 9px 12px;
+}
+
+/* Sections */
+.jr-sec { display: flex; flex-direction: column; gap: 10px; }
+
+.jr-h {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding-bottom: 7px;
+}
+
+/* Chapters */
+.jr-chapters { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+
+/* journal.js builds each chapter as:
+     <li class="jr-ch">
+       <div class="jr-ch-head"><span class="jr-ch-n"/><span class="jr-ch-title"/></div>
+       <div class="jr-ch-sub"/>     (unlocked chapters only)
+       <div class="jr-ch-prog"/>    (unlocked chapters only)
+     </li>
+   The old sheet assumed the badge and title were direct grid children, so the
+   unstyled .jr-ch-head wrapper claimed a whole column and every row grew to
+   ~90px while .jr-ch-prog auto-placed into the title's line.
+
+   `display: contents` flattens the wrapper so the badge, title and progress
+   counter each own a cell: row 1 is badge | title | progress, row 2 is the
+   subtitle. Locked chapters (badge + title only) collapse to a single row. */
+.jr-ch {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 2px;
+  padding: 8px 11px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+}
+
+.jr-ch.is-open { border-color: rgba(255, 255, 255, 0.08); }
+.jr-ch.is-locked { opacity: 0.4; }
+
+.jr-ch-head { display: contents; }
+
+.jr-ch-n {
+  grid-column: 1;
+  grid-row: 1;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: #0b0b12;
+  flex: 0 0 auto;
+}
+
+.jr-ch-title {
+  grid-column: 2;
+  grid-row: 1;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.jr-ch-sub {
+  grid-column: 2 / -1;
+  grid-row: 2;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.42);
+  min-width: 0;
+}
+.jr-ch-sub:empty { display: none; }
+
+.jr-ch-prog {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Quest lists */
+.jr-quests { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+
+.jr-quest {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.028);
+  font-size: 12.5px;
+  transition: background 140ms ease;
+}
+
+.jr-quest:hover { background: rgba(255, 255, 255, 0.06); }
+.jr-quest-i { font-size: 14px; }
+.jr-quest-t { color: rgba(255, 255, 255, 0.82); min-width: 0; overflow-wrap: anywhere; }
+.jr-quest-s {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+  white-space: nowrap;
+}
+
+.jr-quest.is-available .jr-quest-s { color: #ffd700; }
+.jr-quest.is-active    .jr-quest-s { color: #22d3ee; }
+.jr-quest.is-completed .jr-quest-s { color: #4ade80; }
+.jr-quest.is-failed    .jr-quest-s { color: #ef4444; }
+.jr-quest.is-done .jr-quest-t { color: rgba(255, 255, 255, 0.42); text-decoration: line-through; }
+.jr-quest.is-locked { opacity: 0.38; }
+
+.jr-side .jr-quest-i { opacity: 0.85; }
+
+/* People / relationships */
+.jr-people { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+
+.jr-person {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(110px, 190px);
+  align-items: center;
+  gap: 11px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.028);
+}
+
+.jr-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: #101018;
+  flex: 0 0 auto;
+}
+
+.jr-person-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.jr-person-n { font-size: 13px; font-weight: 700; color: #fff; }
+.jr-person-r { font-size: 10.5px; color: rgba(255, 255, 255, 0.42); }
+
+.jr-person-rel { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
+.jr-person-d  { font-size: 10.5px; font-weight: 700; }
+
+.jr-relbar {
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.jr-relfill { display: block; height: 100%; border-radius: 3px; transition: width 320ms ease; }
+
+/* Places */
+.jr-places { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+
+.jr-place {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.028);
+}
+
+.jr-place-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.jr-place-t { display: flex; flex-direction: column; gap: 1px; }
+.jr-place-n { font-size: 12.5px; font-weight: 700; color: #fff; }
+.jr-place-d { font-size: 10px; color: rgba(255, 255, 255, 0.4); }
+.jr-place-b { font-size: 11px; color: rgba(255, 255, 255, 0.5); text-align: end; font-style: italic; }
+
+/* Endings */
+.jr-endings { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+
+.jr-ending {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.028);
+  opacity: 0.55;
+}
+
+.jr-ending.is-got {
+  opacity: 1;
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+}
+
+.jr-ending-n { font-size: 12.5px; font-weight: 700; color: #fff; }
+.jr-ending-s {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.4);
+}
+.jr-ending.is-got .jr-ending-s { color: #22d3ee; }
+
+/* ── Ending choice ─────────────────────────────────────────────────── */
+
+.cutscene-choice {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.cutscene-choice-q {
+  font-size: clamp(15px, 2.2vw, 20px);
+  font-weight: 700;
+  line-height: 1.7;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+}
+
+.cutscene-choice-b {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(14, 13, 24, 0.92);
+  color: #f1f5f9;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: transform 130ms ease, background 130ms ease, border-color 130ms ease;
+}
+
+.cutscene-choice-b:hover,
+.cutscene-choice-b:focus-visible {
+  background: rgba(28, 26, 46, 0.96);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.cutscene-choice-b:active { transform: translateY(0); }
+
+.cutscene-choice-n {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffd700;
+  color: #0b0b12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.cutscene-choice-t { flex: 1 1 auto; }
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .jr-place { grid-template-columns: auto 1fr; }
+  .jr-place-b { grid-column: 2 / 3; text-align: left; }
+  .jr-person { grid-template-columns: auto 1fr; }
+  .jr-person-rel { grid-column: 2 / 3; align-items: flex-start; }
+  .cutscene-inner { width: 94vw; padding: 16px; gap: 14px; }
+}
+
+@media (max-width: 480px) {
+  .jr-stats { grid-template-columns: repeat(2, 1fr); }
+  /* Let the counter drop under the title rather than squeezing it. */
+  .jr-ch { grid-template-columns: auto minmax(0, 1fr); }
+  .jr-ch-title { grid-column: 2; grid-row: 1; }
+  .jr-ch-sub { grid-column: 2 / -1; grid-row: 2; }
+  .jr-ch-prog { grid-column: 2; grid-row: 3; justify-self: start; }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .cutscene-overlay,
+  .cutscene-card,
+  .cutscene-box { animation: none !important; }
+  .jr-relfill { transition: none !important; }
+}

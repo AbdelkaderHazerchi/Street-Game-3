@@ -1,0 +1,1617 @@
+/* ============================================================================
+   STREET GAME 2 — UI DESIGN SYSTEM  ("dossier" theme)
+   ----------------------------------------------------------------------------
+   Loaded AFTER style.css, so this layer owns the presentation of every UI
+   component. Because style.css is a legacy sheet that targets the same
+   selectors with *physical* properties, every rule below fully re-specifies the
+   properties it owns and explicitly resets the opposing ones (top/right/
+   bottom/left, width/max-width, display).
+
+   This is not cosmetic: when a rule here set only `top` while style.css still
+   supplied `bottom`, the absolutely positioned box became over-constrained and
+   stretched to fill the gap (that is how the toast grew to 620px tall and the
+   map zoom controls to 996px wide). Full specification keeps every box
+   single-anchored.
+
+   Two contracts are load-bearing and must not be broken:
+     * Visibility of #shopDialog, #settingsDialog, #newGameDialog, #saveDialog,
+       #loadDialog and #pauseMenu is owned by JS through the INLINE
+       `style.display` property. Their CSS default must therefore stay `none`.
+     * The pause menu body is a flex column whose panels own their own
+       scrolling, so tall content can never escape the shell.
+
+   Content strategy: an investigative dossier of the city. Amber is the
+   case-file accent, cyan is data, magenta is threat. Motion honours
+   prefers-reduced-motion.
+   ========================================================================== */
+
+/* ── 1. Tokens ─────────────────────────────────────────────────────────── */
+:root {
+  /* surfaces */
+  --sg-void:      #07080c;
+  --sg-bg:        #0a0c11;
+  --sg-panel:     rgba(17, 20, 27, 0.82);
+  --sg-panel-2:   rgba(23, 27, 35, 0.72);
+  --sg-panel-3:   rgba(11, 13, 18, 0.94);
+  --sg-hair:      rgba(255, 255, 255, 0.075);
+  --sg-hair-2:    rgba(255, 255, 255, 0.14);
+
+  /* ink */
+  --sg-ink:       #eef1f6;
+  --sg-ink-2:     rgba(238, 241, 246, 0.72);
+  --sg-ink-3:     rgba(238, 241, 246, 0.46);
+  --sg-ink-4:     rgba(238, 241, 246, 0.24);
+
+  /* accents */
+  --sg-amber:     #f5b942;
+  --sg-amber-d:   #b8801f;
+  --sg-cyan:      #5ad1e6;
+  --sg-threat:    #e0455f;
+  --sg-violet:    #a855f7;
+  --sg-jade:      #4ade80;
+
+  /* motion */
+  --sg-ease:      cubic-bezier(0.16, 1, 0.3, 1);
+  --sg-fast:      140ms;
+  --sg-base:      220ms;
+  --sg-slow:      340ms;
+
+  /* geometry */
+  --sg-r-sm:      6px;
+  --sg-r:         10px;
+  --sg-r-lg:      16px;
+  --sg-blur:      saturate(140%) blur(18px);
+  --sg-shadow:    0 24px 60px -12px rgba(0, 0, 0, 0.75),
+                 0 8px 22px -8px rgba(0, 0, 0, 0.6);
+  --sg-inset:     inset 0 1px 0 rgba(255, 255, 255, 0.07);
+
+  --sg-font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --sg-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  /* ---- HUD layout budget ------------------------------------------------
+     The top bar is a band of a *known* height so the mission readout can be
+     anchored underneath it with a single offset and can never collide with it,
+     however tall its own content grows. */
+  --sg-edge:      clamp(10px, 1.4vw, 18px);
+  --sg-edge-x:    clamp(12px, 2vw, 26px);
+  --sg-hud-panel: clamp(40px, 5.4vh, 48px);
+  --sg-topband:   calc(var(--sg-hud-panel) + 2 * var(--sg-edge));
+  --sg-minimap:   clamp(108px, 13vw, 168px);
+
+  /* z-index scale.
+     Dialogs MUST sit above the pause menu: saveGameBtn opens the save dialog
+     while the pause menu is still up (unlike settingsBtn, which hides it
+     first). With the dialogs below, the pause shell swallowed every click and
+     the save dialog's buttons were unusable. */
+  --sg-z-hud:     10;
+  --sg-z-chip:    12;
+  --sg-z-touch:   30;
+  --sg-z-inv:     40;
+  --sg-z-frame:   55;
+  --sg-z-pause:   70;
+  --sg-z-dialog:  75;
+  --sg-z-overlay: 80;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  background: var(--sg-void);
+  color: var(--sg-ink);
+  font-family: var(--sg-font);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── 2. Texture: film grain + scanlines on the menu layers ─────────────── */
+#mainMenu::before,
+#pauseMenu::before,
+.dialog-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.018) 0px,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  mix-blend-mode: overlay;
+}
+
+/* ── 3. Canvas / stage ─────────────────────────────────────────────────── */
+#gameContainer {
+  background: var(--sg-bg);
+  box-shadow: inset 0 0 160px rgba(0, 0, 0, 0.9);
+}
+
+#introVideo { filter: contrast(1.06) saturate(0.9); }
+
+/* ── 4. Buttons ────────────────────────────────────────────────────────── */
+.menu-btn {
+  --btn-bg: var(--sg-panel-2);
+  --btn-edge: var(--sg-hair-2);
+  --btn-ink: var(--sg-ink);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: auto;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 1px solid var(--btn-edge);
+  border-radius: var(--sg-r);
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  overflow: hidden;
+  backdrop-filter: var(--sg-blur);
+  -webkit-backdrop-filter: var(--sg-blur);
+  box-shadow: var(--sg-inset), 0 6px 18px -10px rgba(0, 0, 0, 0.8);
+  transition:
+    transform var(--sg-fast) var(--sg-ease),
+    border-color var(--sg-fast) var(--sg-ease),
+    background-color var(--sg-fast) var(--sg-ease),
+    box-shadow var(--sg-fast) var(--sg-ease);
+}
+
+/* sheen sweep on hover */
+.menu-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%);
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.10) 50%, transparent 70%);
+  transition: transform var(--sg-slow) var(--sg-ease);
+  pointer-events: none;
+}
+
+.menu-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 185, 66, 0.5);
+  background: rgba(30, 34, 43, 0.85);
+  box-shadow: var(--sg-inset), 0 14px 30px -12px rgba(0, 0, 0, 0.9),
+              0 0 0 1px rgba(245, 185, 66, 0.12);
+}
+.menu-btn:hover::after { transform: translateX(120%); }
+
+.menu-btn:active { transform: translateY(0) scale(0.988); }
+
+.menu-btn:focus-visible {
+  outline: 2px solid var(--sg-amber);
+  outline-offset: 3px;
+}
+
+.menu-btn.primary {
+  --btn-bg: linear-gradient(180deg, rgba(245, 185, 66, 0.22), rgba(245, 185, 66, 0.08));
+  --btn-edge: rgba(245, 185, 66, 0.45);
+  color: #ffe6b0;
+  text-shadow: 0 0 18px rgba(245, 185, 66, 0.35);
+}
+.menu-btn.primary:hover {
+  background: linear-gradient(180deg, rgba(245, 185, 66, 0.32), rgba(245, 185, 66, 0.14));
+  box-shadow: var(--sg-inset), 0 16px 36px -14px rgba(0, 0, 0, 0.9),
+              0 0 26px -4px rgba(245, 185, 66, 0.35);
+}
+
+.menu-btn.secondary { color: var(--sg-ink-2); }
+.menu-btn.secondary:hover { color: var(--sg-ink); }
+
+.menu-btn-large {
+  min-height: 54px;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+}
+
+/* ── 5. Main menu ──────────────────────────────────────────────────────── */
+/* The cover art (sg2_cover.jpg) already carries the "Street Game" logo and the
+   base stylesheet hides .menu-left on purpose. The composition is therefore
+   built from the button panel: it sits low and to the inline-end side so the
+   artwork keeps the frame, reading as a dossier card dropped on the desk. */
+#mainMenu {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: clamp(20px, 4vw, 56px) clamp(20px, 5vw, 72px);
+  background-size: cover;
+  background-position: center;
+}
+
+/* darken the lower area so the panel always has contrast under it */
+#mainMenu::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(0deg, rgba(5, 6, 10, 0.94) 0%, rgba(5, 6, 10, 0.55) 34%, rgba(5, 6, 10, 0.18) 62%, rgba(5, 6, 10, 0.42) 100%),
+    radial-gradient(ellipse 90% 70% at 78% 30%, rgba(245, 185, 66, 0.06), transparent 62%);
+}
+
+.menu-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+/* .menu-left stays hidden: the logo lives in the cover art. */
+.menu-left { display: none !important; }
+
+.menu-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: min(380px, 100%);
+  max-width: min(380px, 92vw);
+  padding: 20px;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r-lg);
+  background: var(--sg-panel-3);
+  backdrop-filter: var(--sg-blur);
+  -webkit-backdrop-filter: var(--sg-blur);
+  box-shadow: var(--sg-shadow);
+  animation: sgRise var(--sg-slow) var(--sg-ease);
+}
+
+/* Docket header. Both lines live in ::before because generated ::after content
+   is laid out AFTER the element's children — using it for a header printed the
+   caption underneath the button stack. `white-space: pre` honours the \A break. */
+.menu-right::before {
+  content: "دفتر الأشباح  ·  THE GHOST LEDGER\A CASE FILE  ·  SECTOR 06";
+  white-space: pre;
+  display: block;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--sg-hair);
+  font-family: var(--sg-mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  line-height: 1.9;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--sg-amber);
+  opacity: 0.85;
+}
+.menu-right::after { content: none; }
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 100%;
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  #mainMenu { align-items: flex-end; padding: 18px; }
+  .menu-right { width: 100%; max-width: 100%; padding: 18px; }
+}
+
+/* ── 6. HUD ────────────────────────────────────────────────────────────── */
+#hud,
+#minimap,
+#missionBox,
+#controlsHelp,
+#notification {
+  z-index: var(--sg-z-hud);
+}
+
+/* The band has a fixed, token-derived height. Everything below anchors off it. */
+#topBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: auto;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  height: var(--sg-topband);
+  padding: var(--sg-edge) var(--sg-edge-x);
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(7, 8, 12, 0.86), rgba(7, 8, 12, 0));
+}
+
+/* Vitals cluster: health | money | ammo. Fixed height, no wrapping, so the
+   band height stays predictable. */
+#healthMoney {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 18px);
+  height: var(--sg-hud-panel);
+  padding: 0 14px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r);
+  background: var(--sg-panel);
+  backdrop-filter: var(--sg-blur);
+  -webkit-backdrop-filter: var(--sg-blur);
+  box-shadow: var(--sg-inset), var(--sg-shadow);
+}
+
+#healthLabel {
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--sg-ink-3);
+}
+
+#healthBar {
+  position: relative;
+  width: clamp(96px, 11vw, 160px);
+  height: 9px;
+  margin-top: 5px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+#healthBar::after { content: none; }
+
+#healthFill {
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2f9e5c, var(--sg-jade));
+  box-shadow: 0 0 14px rgba(74, 222, 128, 0.45);
+  transition: width var(--sg-base) var(--sg-ease), background var(--sg-base) linear;
+  animation: none;
+}
+#healthFill::after { content: none; }
+
+#healthFill.low {
+  background: linear-gradient(90deg, #a3243a, var(--sg-threat));
+  box-shadow: 0 0 16px rgba(224, 69, 95, 0.6);
+  animation: sgPulse 1s ease-in-out infinite;
+}
+
+@keyframes sgPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+#moneyDisplay, #ammoDisplay {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+#moneyDisplay {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--sg-jade);
+  text-shadow: 0 0 16px rgba(74, 222, 128, 0.3);
+}
+
+#ammoDisplay {
+  font-family: var(--sg-mono);
+  font-size: 13px;
+  color: var(--sg-ink-2);
+  background: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+#ammoDisplay #weaponName { color: var(--sg-cyan); letter-spacing: 0.06em; }
+#ammoDisplay #ammoAmount { font-size: 15px; font-weight: 800; color: var(--sg-ink); }
+#ammoDisplay #ammoMax { color: var(--sg-ink-4); }
+
+/* Wanted stars — kept beside the vitals they belong with rather than stranded
+   in the opposite top corner. */
+#wantedDisplay {
+  direction: ltr;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: var(--sg-hud-panel);
+  padding: 0 12px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r);
+  background: var(--sg-panel);
+  backdrop-filter: var(--sg-blur);
+  -webkit-backdrop-filter: var(--sg-blur);
+  box-shadow: var(--sg-inset), var(--sg-shadow);
+}
+
+.wantedStar {
+  font-size: 15px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.13);
+  transition: color var(--sg-fast) linear, text-shadow var(--sg-fast) linear,
+              transform var(--sg-fast) var(--sg-ease);
+}
+.wantedStar.active {
+  color: var(--sg-threat);
+  text-shadow: 0 0 12px rgba(224, 69, 95, 0.75);
+  transform: scale(1.08);
+}
+
+/* Mission readout — anchored strictly below the top band. */
+#missionBox {
+  position: absolute;
+  top: calc(var(--sg-topband) + 6px);
+  bottom: auto;
+  left: auto;
+  right: var(--sg-edge-x);
+  max-width: min(400px, 44vw);
+  min-width: 0;
+  padding: 13px 16px;
+  border: 1px solid var(--sg-hair);
+  border-inline-start: 3px solid var(--sg-amber);
+  border-radius: var(--sg-r);
+  background: var(--sg-panel);
+  backdrop-filter: var(--sg-blur);
+  -webkit-backdrop-filter: var(--sg-blur);
+  box-shadow: var(--sg-inset), var(--sg-shadow);
+  transition: border-color var(--sg-base) var(--sg-ease);
+}
+
+#missionBox.mission-main { border-color: rgba(245, 185, 66, 0.35); }
+#missionBox.mission-side { border-inline-start-color: var(--sg-violet); border-color: rgba(168, 85, 247, 0.35); }
+
+#missionTitle {
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--sg-amber);
+  text-shadow: none;
+}
+#missionBox.mission-side #missionTitle { color: #c084fc; }
+
+#missionDesc {
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--sg-ink-2);
+}
+
+#missionProgress {
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px solid var(--sg-hair);
+  font-family: var(--sg-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--sg-cyan);
+}
+
+/* suspicion strip */
+#suspicionContainer { border-radius: var(--sg-r-sm); }
+
+/* ── 7. Weapon quick bar (created by js/ui/hud.js as #inventory-panel) ── */
+/* hud.js appends this chip to <body> with inline `position: fixed;
+   bottom: 12px; left: 12px`, which is the same corner as #controlsHelp, so the
+   two collided. Re-anchor it to the bottom centre, between the two corner
+   clusters. `!important` is required to beat those inline styles. */
+#inventory-panel {
+  position: fixed !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: var(--sg-edge) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  max-width: min(280px, 26vw) !important;
+  padding: 5px 9px !important;
+  border: 1px solid var(--sg-hair-2) !important;
+  border-radius: var(--sg-r) !important;
+  background: var(--sg-panel-3) !important;
+  box-shadow: var(--sg-shadow) !important;
+  backdrop-filter: var(--sg-blur) !important;
+  -webkit-backdrop-filter: var(--sg-blur) !important;
+  z-index: var(--sg-z-chip) !important;
+  pointer-events: none !important;
+}
+
+/* A dialogue owns the bottom centre while it is open. Matched on the open
+   state (`display:flex`, set by chat.js / meeting.js) rather than on
+   `display: none`, which is written without a space by the markup. */
+body:has(#chatDialog[style*="flex"]) #inventory-panel,
+body:has(#meetingDialog[style*="flex"]) #inventory-panel {
+  display: none !important;
+}
+
+/* Minimap — bottom outer corner. */
+#minimap {
+  position: absolute;
+  top: auto;
+  bottom: var(--sg-edge);
+  left: auto;
+  right: var(--sg-edge-x);
+  width: var(--sg-minimap);
+  height: var(--sg-minimap);
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r);
+  overflow: hidden;
+  background: var(--sg-panel-3);
+  backdrop-filter: var(--sg-blur);
+  -webkit-backdrop-filter: var(--sg-blur);
+  box-shadow: var(--sg-shadow);
+}
+
+#minimap canvas { display: block; width: 100%; height: 100%; border-radius: calc(var(--sg-r) - 1px); border: none; }
+
+/* Controls hint — bottom outer corner on the opposite side. */
+#controlsHelp {
+  position: absolute;
+  top: auto;
+  bottom: var(--sg-edge);
+  left: var(--sg-edge-x);
+  right: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  max-width: min(380px, 38vw);
+  padding: 10px 13px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r);
+  background: rgba(10, 12, 17, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--sg-ink-3);
+  text-align: left;
+  direction: ltr;
+  pointer-events: none;
+}
+
+#controlsHelp span {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  font-family: var(--sg-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--sg-amber);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+}
+
+/* Toast — ONE anchor (top only). Giving it both `top` and `bottom` is what
+   stretched it to 620px tall. */
+#notification {
+  position: absolute;
+  top: var(--sg-edge);
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%) translateY(-14px);
+  max-width: min(460px, 60vw);
+  max-height: 30vh;
+  overflow: hidden;
+  padding: 10px 16px;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r);
+  background: var(--sg-panel-3);
+  backdrop-filter: var(--sg-blur);
+  -webkit-backdrop-filter: var(--sg-blur);
+  box-shadow: var(--sg-shadow);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--sg-ink);
+  text-align: center;
+  text-shadow: none;
+  white-space: normal;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--sg-base) var(--sg-ease),
+              transform var(--sg-base) var(--sg-ease);
+}
+#notification.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Inventory modal */
+#inventoryPanel {
+  position: absolute;
+  top: 50%;
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  transform: translate(-50%, -50%);
+  z-index: var(--sg-z-inv);
+  border: 1px solid var(--sg-hair-2) !important;
+  border-radius: var(--sg-r-lg) !important;
+  background: var(--sg-panel-3) !important;
+  box-shadow: var(--sg-shadow) !important;
+}
+
+#invHeader {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--sg-ink-3);
+  border-bottom: 1px solid var(--sg-hair);
+  padding-bottom: 8px;
+}
+
+.inv-slot {
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r-sm);
+  background: rgba(255, 255, 255, 0.04);
+  transition: border-color var(--sg-fast) var(--sg-ease),
+              background-color var(--sg-fast) var(--sg-ease),
+              transform var(--sg-fast) var(--sg-ease);
+}
+.inv-slot:hover { border-color: var(--sg-hair-2); transform: translateY(-1px); }
+.inv-slot.active {
+  border-color: rgba(245, 185, 66, 0.55);
+  background: rgba(245, 185, 66, 0.10);
+  box-shadow: 0 0 0 1px rgba(245, 185, 66, 0.16), 0 6px 18px -10px rgba(245, 185, 66, 0.5);
+}
+.inv-slot .key { font-family: var(--sg-mono); color: var(--sg-amber); }
+.inv-slot .ammo { color: var(--sg-ink-3); font-family: var(--sg-mono); }
+
+/* ── 8. Dialogs ────────────────────────────────────────────────────────── */
+/* JS owns visibility through the inline style.display property. */
+.dialog-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: var(--sg-z-dialog);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(5, 6, 9, 0.72);
+  backdrop-filter: blur(9px) saturate(120%);
+  -webkit-backdrop-filter: blur(9px) saturate(120%);
+  animation: sgFade var(--sg-base) var(--sg-ease);
+}
+
+@keyframes sgFade { from { opacity: 0; } to { opacity: 1; } }
+
+.dialog-box {
+  position: relative;
+  z-index: 1;
+  width: min(560px, 100%);
+  min-width: 0;
+  max-width: 100%;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 24px 26px;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r-lg);
+  background: var(--sg-panel-3);
+  backdrop-filter: var(--sg-blur);
+  -webkit-backdrop-filter: var(--sg-blur);
+  box-shadow: var(--sg-shadow);
+  animation: sgRise var(--sg-base) var(--sg-ease);
+}
+.settings-box { width: min(660px, 100%); }
+
+@keyframes sgRise {
+  from { opacity: 0; transform: translateY(16px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.dialog-box h2 {
+  margin: 0 0 16px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--sg-amber);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--sg-hair);
+}
+
+.dialog-box p { color: var(--sg-ink-2); font-size: 13.5px; }
+
+.dialog-box input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--sg-ink);
+  font-family: inherit;
+  font-size: 14.5px;
+  text-align: start;
+  transition: border-color var(--sg-fast) var(--sg-ease),
+              box-shadow var(--sg-fast) var(--sg-ease);
+}
+.dialog-box input:focus {
+  outline: none;
+  border-color: rgba(245, 185, 66, 0.6);
+  box-shadow: 0 0 0 3px rgba(245, 185, 66, 0.14);
+}
+
+.dialog-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.dialog-buttons .menu-btn { flex: 1 1 140px; }
+
+.slots-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: min(46vh, 320px);
+  overflow-y: auto;
+  margin: 0;
+  padding-inline-end: 5px;
+}
+
+.save-slot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r);
+  background: rgba(255, 255, 255, 0.035);
+  cursor: pointer;
+  transition: border-color var(--sg-fast) var(--sg-ease),
+              background-color var(--sg-fast) var(--sg-ease),
+              transform var(--sg-fast) var(--sg-ease);
+}
+.save-slot:hover {
+  border-color: rgba(245, 185, 66, 0.45);
+  background: rgba(245, 185, 66, 0.07);
+  transform: translateX(3px);
+}
+.save-slot > div:first-child { flex: 1 1 auto; min-width: 0; }
+.save-slot .name { font-size: 13.5px; font-weight: 700; color: var(--sg-ink); }
+.save-slot .info { font-size: 11px; color: var(--sg-ink-3); font-family: var(--sg-mono); }
+.save-slot .delete-btn {
+  margin-inline-start: auto;
+  flex: 0 0 auto;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r-sm);
+  background: rgba(224, 69, 95, 0.10);
+  color: var(--sg-threat);
+  cursor: pointer;
+  padding: 6px 10px;
+  font-size: 13px;
+  transition: background-color var(--sg-fast) var(--sg-ease),
+              transform var(--sg-fast) var(--sg-ease);
+}
+.save-slot .delete-btn:hover { background: rgba(224, 69, 95, 0.24); transform: scale(1.06); }
+
+/* ── 9. Settings ───────────────────────────────────────────────────────── */
+.settings-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  margin-bottom: 18px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.settings-tab {
+  flex: 1;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: var(--sg-r-sm);
+  background: transparent;
+  color: var(--sg-ink-3);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color var(--sg-fast) var(--sg-ease), color var(--sg-fast) var(--sg-ease);
+}
+.settings-tab:hover { color: var(--sg-ink); }
+.settings-tab.active {
+  background: rgba(245, 185, 66, 0.14);
+  color: var(--sg-amber);
+  box-shadow: var(--sg-inset);
+}
+
+.settings-panel { display: none; }
+.settings-panel.active { display: block; animation: sgFade var(--sg-fast) var(--sg-ease); }
+
+.settings-section {
+  background: rgba(255, 255, 255, 0.028);
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r);
+  padding: 14px;
+}
+.settings-subtitle {
+  margin: 0 0 10px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--sg-ink-3);
+}
+.settings-hint { font-size: 11.5px; color: var(--sg-ink-3); margin-bottom: 12px; }
+.settings-divider { height: 1px; background: var(--sg-hair); margin: 16px 0; }
+
+.settings-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.settings-label { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.settings-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--sg-hair);
+  border-radius: 8px;
+}
+.settings-name { font-size: 13.5px; font-weight: 700; color: var(--sg-ink); }
+.settings-desc { font-size: 11.5px; color: var(--sg-ink-3); }
+
+.settings-select {
+  padding: 9px 13px;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r);
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--sg-ink);
+  font-family: inherit;
+  font-size: 13px;
+  min-width: 140px;
+  cursor: pointer;
+  transition: border-color var(--sg-fast) var(--sg-ease);
+}
+.settings-select:focus-visible { outline: 2px solid var(--sg-amber); outline-offset: 2px; }
+.settings-select option { background: #12151c; color: var(--sg-ink); }
+
+.difficulty-group {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.diff-btn {
+  flex: 1;
+  padding: 8px 13px;
+  border: 0;
+  border-radius: var(--sg-r-sm);
+  background: transparent;
+  color: var(--sg-ink-3);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--sg-fast) var(--sg-ease), color var(--sg-fast) var(--sg-ease);
+}
+.diff-btn:hover { color: var(--sg-ink); }
+.diff-btn.active { background: rgba(245, 185, 66, 0.16); color: var(--sg-amber); }
+.diff-btn[data-diff="easy"].active { background: rgba(74, 222, 128, 0.16); color: var(--sg-jade); }
+.diff-btn[data-diff="hard"].active { background: rgba(224, 69, 95, 0.16); color: var(--sg-threat); }
+
+#keybindList { display: flex; flex-direction: column; gap: 7px; }
+#keybindList button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 10px 13px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r-sm);
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--sg-ink);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color var(--sg-fast) var(--sg-ease), background var(--sg-fast) var(--sg-ease);
+}
+#keybindList button:hover { border-color: var(--sg-hair-2); background: rgba(255,255,255,0.06); }
+#keybindList button.rebinding { border-color: var(--sg-amber); background: rgba(245,185,66,0.1); }
+
+/* ── 10. Pause menu ────────────────────────────────────────────────────── */
+/* Hidden by default; JS opens it with the inline style.display = "flex". */
+#pauseMenu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: var(--sg-z-pause);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(14px, 3vw, 34px);
+  background: rgba(5, 6, 9, 0.78);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  animation: sgFade var(--sg-fast) var(--sg-ease);
+}
+
+.pause-shell {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: min(1060px, 100%);
+  height: auto;
+  max-height: min(92vh, 900px);
+  overflow: hidden;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r-lg);
+  background: var(--sg-panel-3);
+  box-shadow: var(--sg-shadow);
+  animation: sgRise var(--sg-base) var(--sg-ease);
+}
+
+.pause-header {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--sg-hair);
+  background: linear-gradient(180deg, rgba(245, 185, 66, 0.05), transparent);
+}
+
+.pause-title-row { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pause-title {
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: var(--sg-ink);
+  text-shadow: none;
+}
+.pause-subtitle {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--sg-ink-3);
+}
+.pause-header-actions { display: flex; align-items: center; gap: 8px; }
+.pause-hint {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--sg-ink-4);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 5px 10px;
+  border: 1px solid var(--sg-hair);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.pause-tabs {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  padding: 8px 14px 0;
+  border-bottom: 1px solid var(--sg-hair);
+}
+
+.pause-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1 1 0;
+  max-width: 220px;
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: var(--sg-r-sm) var(--sg-r-sm) 0 0;
+  background: transparent;
+  color: var(--sg-ink-3);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--sg-fast) var(--sg-ease),
+              border-color var(--sg-fast) var(--sg-ease),
+              background-color var(--sg-fast) var(--sg-ease);
+}
+.pause-tab:hover { color: var(--sg-ink); background: rgba(255,255,255,0.03); }
+.pause-tab.active { color: var(--sg-amber); border-bottom-color: var(--sg-amber); }
+.pause-tab-icon { font-size: 13px; opacity: 0.9; }
+
+/* The body is a flex column and each panel owns its own scrolling. Without
+   this the journal resolved `height: 100%` against an indefinite flex height,
+   grew to 3454px and was clipped by the shell with no way to scroll. */
+.pause-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pause-panel {
+  display: none;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.pause-panel.active { display: flex; animation: sgFade var(--sg-base) var(--sg-ease); }
+
+#pauseMenuPanel {
+  overflow-y: auto;
+  padding: 22px;
+  max-height: min(58vh, 520px);
+}
+
+/* Balanced 1 / 2 / 1 button block: the primary action spans the row, the
+   settings + save pair shares the next, and quit closes the grid. */
+.pause-menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.pause-menu-grid .pause-menu-btn { min-height: 50px; }
+.pause-menu-grid .pause-menu-btn:first-child { grid-column: 1 / -1; min-height: 56px; font-size: 16px; }
+.pause-menu-grid .pause-menu-btn:last-child { grid-column: 1 / -1; }
+
+.pause-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 520px;
+  margin: 20px auto 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--sg-hair);
+}
+.pause-stat {
+  padding: 10px 12px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r);
+  background: rgba(255, 255, 255, 0.035);
+  font-family: var(--sg-mono);
+  font-size: 13px;
+  text-align: center;
+  color: var(--sg-ink-2);
+  white-space: nowrap;
+}
+
+.pause-footer {
+  flex: 0 0 auto;
+  padding: 10px 22px;
+  border-top: 1px solid var(--sg-hair);
+  background: rgba(0, 0, 0, 0.25);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--sg-ink-4);
+  text-align: center;
+}
+
+/* ── 11. Full map ──────────────────────────────────────────────────────── */
+.fullmap-wrap {
+  position: relative;
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: min(62vh, 540px);
+  padding: 0;
+  background: radial-gradient(ellipse at 50% 40%, #0d1017, #07080c);
+}
+
+/* Absolutely positioned so the floating overlays can never influence the
+   canvas box. */
+#fullMapCanvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  cursor: grab;
+}
+#fullMapCanvas:active { cursor: grabbing; }
+
+.fullmap-topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(7, 8, 12, 0.9), transparent);
+}
+.fullmap-title {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--sg-ink-2);
+}
+.fullmap-actions { display: flex; gap: 7px; pointer-events: auto; }
+
+.fullmap-btn {
+  padding: 7px 12px;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r-sm);
+  background: var(--sg-panel-2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--sg-ink-2);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color var(--sg-fast) var(--sg-ease), color var(--sg-fast) var(--sg-ease);
+}
+.fullmap-btn:hover { border-color: rgba(245,185,66,0.5); color: var(--sg-amber); }
+
+/* Single anchor + full reset: the legacy `right` + `top: 50%` +
+   translateY(-50%) left over from style.css used to stretch this container to
+   996px wide. */
+.fullmap-zoom-controls {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  bottom: auto;
+  left: auto;
+  width: auto;
+  height: auto;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: auto;
+}
+.fullmap-zoom-btn {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r-sm);
+  background: var(--sg-panel-2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--sg-ink-2);
+  font-size: 16px;
+  cursor: pointer;
+  transition: border-color var(--sg-fast) var(--sg-ease), color var(--sg-fast) var(--sg-ease);
+}
+.fullmap-zoom-btn:hover { border-color: rgba(245,185,66,0.5); color: var(--sg-amber); }
+.fullmap-zoom-btn:active { transform: scale(0.95); }
+
+.fullmap-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  border: 1px solid var(--sg-hair);
+  border-radius: 999px;
+  background: rgba(7, 8, 12, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 10.5px;
+  color: var(--sg-ink-3);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.fullmap-coords {
+  position: absolute;
+  top: 62px;
+  right: 16px;
+  left: auto;
+  padding: 4px 8px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r-sm);
+  background: rgba(7, 8, 12, 0.78);
+  font-family: var(--sg-mono);
+  font-size: 10.5px;
+  color: var(--sg-cyan);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Bounded so a long zone list scrolls inside the card instead of spilling out
+   over the map. */
+.fullmap-legend {
+  position: absolute;
+  top: 62px;
+  left: 16px;
+  right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: auto;
+  max-width: 178px;
+  max-height: calc(100% - 110px);
+  overflow-y: auto;
+  padding: 11px 13px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r);
+  background: rgba(7, 8, 12, 0.86);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  pointer-events: auto;
+}
+.fullmap-legend-title {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--sg-ink-3);
+  margin-bottom: 2px;
+}
+.fullmap-legend-item { display: flex; align-items: center; gap: 7px; font-size: 10.5px; color: var(--sg-ink-3); }
+.fullmap-legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex: 0 0 auto; }
+
+/* ── 12. Journal panel ─────────────────────────────────────────────────── */
+#pauseJournalPanel { overflow: hidden; }
+
+.journal-wrap {
+  flex: 1 1 auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px 22px 22px;
+}
+
+/* ── 13. Shop ──────────────────────────────────────────────────────────── */
+#shopDialog .dialog-box {
+  width: min(760px, 100%);
+  min-width: 0;
+  max-width: min(820px, 100%);
+  max-height: min(90vh, 800px);
+  display: flex;
+  flex-direction: column;
+}
+#shopDialog .slots-container {
+  max-height: min(52vh, 460px) !important;
+  min-height: 0;
+  overflow-x: hidden;
+  padding: 2px;
+}
+
+.shop-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--sg-hair);
+  border-radius: var(--sg-r);
+  background: rgba(255, 255, 255, 0.035);
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: border-color var(--sg-fast) var(--sg-ease), background-color var(--sg-fast) var(--sg-ease);
+}
+.shop-item:hover { border-color: rgba(245,185,66,0.4); background: rgba(245,185,66,0.06); }
+.shop-item-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 54px;
+  height: 44px;
+  border-radius: var(--sg-r-sm);
+  background: rgba(0,0,0,0.35);
+  border: 1px solid var(--sg-hair);
+  font-size: 21px;
+  overflow: hidden;
+}
+.shop-item-media img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+.shop-item-info { flex: 1 1 auto; min-width: 0; text-align: start; }
+.shop-item-name { font-size: 13.5px; font-weight: 800; color: var(--sg-ink); overflow-wrap: anywhere; }
+.shop-item-name .price { color: var(--sg-amber); font-weight: 800; white-space: nowrap; }
+.shop-item-desc { font-size: 11.5px; color: var(--sg-ink-3); margin-top: 2px; overflow-wrap: anywhere; }
+.shop-item .menu-btn {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 116px;
+  max-width: 40%;
+  padding: 9px 16px;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── 14. Chat + meeting frames ─────────────────────────────────────────── */
+#chatDialog, #meetingDialog {
+  position: absolute;
+  top: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--sg-z-frame);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 18px;
+  background: linear-gradient(0deg, rgba(5,6,9,0.86), transparent);
+  pointer-events: none;
+}
+
+.chat-frame, .meeting-frame {
+  pointer-events: auto;
+  width: min(820px, 100%);
+  max-width: 100%;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 16px 20px;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r);
+  background: var(--sg-panel-3);
+  backdrop-filter: var(--sg-blur);
+  -webkit-backdrop-filter: var(--sg-blur);
+  box-shadow: var(--sg-shadow);
+  animation: sgRise var(--sg-base) var(--sg-ease);
+}
+
+.chat-frame-header, .meeting-frame-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--sg-hair);
+}
+
+.chat-speaker, .meeting-speaker {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sg-amber);
+}
+
+.chat-progress, .meeting-progress {
+  font-family: var(--sg-mono);
+  font-size: 10.5px;
+  color: var(--sg-ink-4);
+  white-space: nowrap;
+}
+
+.chat-message, .meeting-message {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--sg-ink);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 12px 14px;
+  border-radius: var(--sg-r-sm);
+  border: 1px solid var(--sg-hair);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.chat-actions { display: flex; gap: 8px; margin-top: 13px; }
+.chat-actions .menu-btn { flex: 1 1 auto; }
+
+.chat-hint, .meeting-hint {
+  margin-top: 9px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--sg-ink-4);
+}
+.chat-hint .kbd, .meeting-hint .kbd {
+  padding: 1px 5px;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: 3px;
+  background: rgba(255,255,255,0.05);
+  font-family: var(--sg-mono);
+  color: var(--sg-ink-2);
+}
+
+/* ── 15. Overlay + misc ────────────────────────────────────────────────── */
+#gameOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--sg-z-overlay);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(5, 6, 9, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+#overlayContent {
+  position: relative;
+  z-index: 1;
+  max-width: min(520px, calc(100vw - 40px));
+  padding: clamp(24px, 5vw, 40px) clamp(24px, 5vw, 48px);
+  text-align: center;
+  background: var(--sg-panel-3);
+  border: 1px solid var(--sg-hair-2);
+  border-radius: var(--sg-r-lg);
+  box-shadow: var(--sg-shadow);
+}
+
+#overlayContent h2 {
+  margin: 0 0 12px;
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  background: linear-gradient(45deg, #f5b942, #ff5500);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#overlayContent p {
+  margin: 0 0 22px;
+  font-size: clamp(14px, 2vw, 16px);
+  color: var(--sg-ink-2);
+}
+
+#overlayContent button {
+  padding: 12px 34px;
+  min-height: 46px;
+  border: 1px solid rgba(245, 185, 66, 0.45);
+  border-radius: var(--sg-r);
+  background: linear-gradient(180deg, rgba(245, 185, 66, 0.28), rgba(245, 185, 66, 0.12));
+  color: #ffe6b0;
+  font-family: inherit;
+  font-size: clamp(14px, 2vw, 16px);
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform var(--sg-fast) var(--sg-ease), box-shadow var(--sg-fast) var(--sg-ease);
+}
+#overlayContent button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px -12px rgba(245, 185, 66, 0.6);
+}
+
+#skipHint {
+  bottom: 26px !important;
+  padding: 6px 14px;
+  border: 1px solid var(--sg-hair-2);
+  border-radius: 999px;
+  background: rgba(10, 12, 17, 0.85);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--sg-ink-2);
+  box-shadow: var(--sg-shadow);
+}
+
+body.ui-hidden .menu-btn:focus-visible { outline-color: var(--sg-cyan); }
+
+/* ── 16. Touch controls ────────────────────────────────────────────────── */
+#touchControls { z-index: var(--sg-z-touch); }
+
+.touch-btn {
+  border: 1px solid var(--sg-hair-2);
+  border-radius: 50%;
+  background: rgba(17, 20, 27, 0.7);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  color: var(--sg-ink);
+  box-shadow: var(--sg-shadow);
+  transition: transform var(--sg-fast) var(--sg-ease), background-color var(--sg-fast) var(--sg-ease);
+}
+.touch-btn.pressed { background: rgba(245, 185, 66, 0.24); border-color: var(--sg-amber); }
+
+/* The minimap and the touch clusters share the bottom corners on phones, so
+   lift it clear of the thumb zones. */
+#gameContainer.touch-active #minimap {
+  bottom: calc(var(--sg-edge) + var(--sg-minimap) + 14px);
+  right: var(--sg-edge);
+}
+
+/* ── 17. Responsive ────────────────────────────────────────────────────── */
+/* Below this width the three bottom clusters cannot share the row without
+   colliding, so the controls hint yields (the quick bar stays, the map stays). */
+@media (max-width: 1100px) {
+  #controlsHelp { display: none; }
+}
+
+@media (max-width: 900px) {
+  #missionBox { max-width: 60vw; }
+}
+
+@media (max-width: 720px) {
+  .pause-header { flex-direction: column; align-items: flex-start; gap: 8px; padding: 14px 16px; }
+  .pause-tabs { padding: 8px 10px 0; overflow-x: auto; }
+  .pause-tab { padding: 9px 12px; font-size: 12px; }
+  #pauseMenuPanel { padding: 16px; max-height: min(60vh, 460px); }
+  .pause-menu-grid { grid-template-columns: 1fr; }
+  .pause-menu-grid .pause-menu-btn:last-child { grid-column: auto; }
+  .pause-stats { grid-template-columns: 1fr; }
+  .dialog-box { padding: 20px 18px; }
+  .menu-btn { min-height: 42px; padding: 10px 16px; }
+  .fullmap-legend { max-width: 140px; }
+  .journal-wrap { padding: 14px 16px 18px; }
+}
+
+@media (max-width: 480px) {
+  #missionBox { max-width: calc(100vw - 2 * var(--sg-edge-x)); }
+  #notification { max-width: calc(100vw - 2 * var(--sg-edge)); }
+  .shop-item { flex-wrap: wrap; }
+  .shop-item-info { flex: 1 1 160px; }
+  .shop-item .menu-btn { flex: 1 1 110px; min-width: 110px; max-width: 100%; }
+  .shop-item-media { width: 46px; height: 38px; }
+  .fullmap-hint { display: none; }
+}
+
+/* Short landscape (phones on their side): the vertical budget is tiny. */
+@media (max-height: 560px) {
+  #missionBox { padding: 9px 12px; }
+  #missionDesc { font-size: 11.5px; }
+  .pause-shell { max-height: 96vh; }
+  .fullmap-wrap { min-height: 300px; }
+  #notification { max-height: 26vh; }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  #missionBox { max-width: min(280px, 42vw); }
+  .chat-frame, .meeting-frame { max-height: 66vh; }
+}
+
+/* ── 18. Reduced motion ────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .menu-btn:hover, .save-slot:hover, .shop-item:hover { transform: none; }
+  .menu-btn::after { display: none; }
+}
+
+/* ── 19. RTL polish ────────────────────────────────────────────────────── */
+/* Most HUD anchors above are physical on purpose so the map and the key hints
+   keep opposing corners in both writing directions. Only the transforms that
+   genuinely mirror need a direction guard. */
+[dir="rtl"] .save-slot:hover { transform: translateX(-3px); }
+[dir="ltr"] #notification { transform: translateX(-50%) translateY(-14px); }
+[dir="ltr"] #notification.visible { transform: translateX(-50%) translateY(0); }
